@@ -10,7 +10,7 @@ export const apiRequest = async (url, options = {}) => {
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  const res = await fetch(`http://localhost:5000${url}`, {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}${url}`, {
     ...options,
     headers,
   });
