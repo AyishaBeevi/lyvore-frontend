@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@import "./theme.css";
+
+@layer utilities {
+  .shadow-soft {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  .rounded-xl2 {
+    border-radius: 1.25rem; /* custom between xl and 2xl */
+  }
+}
+
