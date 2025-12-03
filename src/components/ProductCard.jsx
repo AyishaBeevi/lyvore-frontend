@@ -57,7 +57,7 @@ export default function ProductCard({ product }) {
     product.images?.[0]?.startsWith('http')
       ? product.images[0]
       : product.images?.[0]
-      ? `http://localhost:5000${product.images[0]}`
+      ? `${import.meta.env.VITE_API_URL}${product.images[0]}`
       : 'https://via.placeholder.com/400x300?text=No+Image';
 
   // 💰 Calculate discounted price
