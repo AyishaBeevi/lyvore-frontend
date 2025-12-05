@@ -100,18 +100,32 @@ export default function Home() {
   return (
     <main className="w-full bg-[#fffaf6] text-gray-800 overflow-x-hidden">
 
-      {/* ---------- 1️⃣ HERO SECTION (Fixed mobile cropping) ---------- */}
-  <section className="w-full h-screen flex items-center justify-center relative bg-white">
+      {/* ---------- 1️⃣ HERO SECTION (Separate mobile + desktop) ---------- */}
+<section className="w-full h-screen flex items-center justify-center relative bg-white">
+
+  {/* Desktop Logo */}
   <motion.img
-    src="/images/newlogooo.jpg"
-    alt="Brand Logo"
-    className="w-full h-full object-cover"
+    src="/images/logodesktop.jpg"
+    alt="Brand Logo Desktop"
+    className="hidden md:block w-full h-full object-cover"
     initial={{ scale: 1.1, opacity: 0 }}
     animate={{ scale: 1, opacity: 1 }}
     transition={{ duration: 1.2, ease: "easeOut" }}
   />
+
+  {/* Mobile Logo */}
+  <motion.img
+    src="/images/logo.png.jpg"
+    alt="Brand Logo Mobile"
+    className="block md:hidden w-full h-full object-cover"
+    initial={{ scale: 1.1, opacity: 0 }}
+    animate={{ scale: 1, opacity: 1 }}
+    transition={{ duration: 1.2, ease: "easeOut" }}
+  />
+
   <div className="absolute inset-0 bg-gradient-to-b from-white/50 to-white/0"></div>
 </section>
+
 
       {/* ---------- 2️⃣ SIGNATURE PRODUCT SECTION ---------- */}
       <section className="flex flex-col md:flex-row items-center justify-between gap-10 py-20 px-8 md:px-20 bg-[#faf6f1]">
