@@ -16,7 +16,9 @@ export default function ContactUs() {
     setError("");
 
     try {
-      await axios.post("http://localhost:5000/api/contact", formData);
+      // await axios.post("http://localhost:5000/api/contact", formData);
+      await axios.post("https://lyvore-backend.onrender.com/api/contact", formData);
+
       setSubmitted(true);
     } catch (err) {
       console.error("Error sending message:", err);
