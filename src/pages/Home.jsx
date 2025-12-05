@@ -115,7 +115,7 @@ export default function Home() {
 
   {/* Mobile Logo */}
   <motion.img
-    src="/images/logo.png.jpg"
+    src="/images/LYVORE.jpg"
     alt="Brand Logo Mobile"
     className="block md:hidden w-full h-full object-cover"
     initial={{ scale: 1.1, opacity: 0 }}
