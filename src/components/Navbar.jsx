@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -13,14 +14,11 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [bounce, setBounce] = useState(false);
 
-  // ✅ Search state
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
-  // Compute total items in cart
   const totalItems = items?.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
-  // Cart bounce effect
   useEffect(() => {
     if (totalItems > 0) {
       setBounce(true);
@@ -29,7 +27,6 @@ export default function Navbar() {
     }
   }, [totalItems]);
 
-  // ✅ Fetch search suggestions based on input
   useEffect(() => {
     const fetchSuggestions = async () => {
       if (!searchQuery.trim()) return setSuggestions([]);
@@ -41,11 +38,10 @@ export default function Navbar() {
         setSuggestions([]);
       }
     };
-    const debounce = setTimeout(fetchSuggestions, 300); // debounce for 300ms
+    const debounce = setTimeout(fetchSuggestions, 300);
     return () => clearTimeout(debounce);
   }, [searchQuery]);
 
-  // ✅ Navigate to product details page on selecting a suggestion
   const handleSearchSelect = (slug) => {
     navigate(`/product/${slug}`);
     setSearchQuery("");
@@ -68,7 +64,6 @@ export default function Navbar() {
           <NavLink to="/about" className="hover:opacity-80">About Us</NavLink>
           <NavLink to="/contact" className="hover:opacity-80">Contact Us</NavLink>
 
-          {/* ✅ Desktop Search */}
           <div className="relative">
             <input
               type="text"
@@ -86,14 +81,10 @@ export default function Navbar() {
                     <li
                       key={prod._id}
                       className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                      onClick={() => handleSearchSelect(prod.slug)} // ✅ slug-based navigation
+                      onClick={() => handleSearchSelect(prod.slug)}
                     >
                       {parts.map((part, idx) =>
-                        regex.test(part) ? (
-                          <span key={idx} className="font-bold">{part}</span>
-                        ) : (
-                          <span key={idx}>{part}</span>
-                        )
+                        regex.test(part) ? <span key={idx} className="font-bold">{part}</span> : <span key={idx}>{part}</span>
                       )}
                     </li>
                   );
@@ -107,7 +98,7 @@ export default function Navbar() {
             <ShoppingCart size={22} className="text-brand-brown hover:text-black transition-colors" />
             {totalItems > 0 && (
               <span
-                className={`absolute -top-2 -right-3 bg-brand-brown text-white text-xs px-2 py-0.5 rounded-full transition-transform ${bounce ? "animate-bounce" : ""}`}
+                className={`absolute -top-2 -right-3 bg-brand-brown text-brown text-xs px-2 py-0.5 rounded-full transition-transform ${bounce ? "animate-bounce" : ""}`}
               >
                 {totalItems}
               </span>
@@ -117,41 +108,53 @@ export default function Navbar() {
           {/* Auth / Profile */}
           {user ? (
             <>
-              <NavLink
-                to="/profile"
-                className="px-3 py-1 rounded-md bg-gray-200 text-gray-800 text-sm hover:bg-gray-300"
-              >
+              <NavLink to="/profile" className="px-3 py-1 rounded-md bg-gray-200 text-gray-800 text-sm hover:bg-gray-300">
                 Profile
               </NavLink>
               <button
-                className="px-3 py-1 rounded-md bg-brand-brown text-white text-sm"
+                className="px-3 py-1 rounded-md bg-brand-brown text-black text-sm"
                 onClick={async () => { await logout(); }}
               >
                 Logout
               </button>
             </>
           ) : (
-            <NavLink className="px-3 py-1 rounded-md bg-brand-brown text-white text-sm" to="/login">
+            <NavLink className="px-3 py-1 rounded-md bg-brand-brown text-black text-sm" to="/login">
               Login
             </NavLink>
           )}
         </nav>
 
-        {/* Mobile Hamburger */}
-        <button className="md:hidden p-2" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle Menu">
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile Cart + Hamburger */}
+        <div className="flex items-center gap-4 md:hidden">
+          {/* Cart */}
+          <NavLink to="/cart" className="relative flex items-center" id="cart-icon">
+            <ShoppingCart size={22} className="text-brand-brown hover:text-black transition-colors" />
+            {totalItems > 0 && (
+              <span
+                className={`absolute -top-2 -right-3 bg-brand-brown text-brown text-xs px-2 py-0.5 rounded-full transition-transform ${bounce ? "animate-bounce" : ""}`}
+              >
+                {totalItems}
+              </span>
+            )}
+          </NavLink>
+
+          {/* Hamburger */}
+          <button className="p-2" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle Menu">
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur border-t p-4 flex flex-col gap-4 relative">
+        <div className="md:hidden bg-white/95 backdrop-blur border-t p-4 flex flex-col gap-4 relative max-h-[80vh] overflow-y-auto">
           <NavLink to="/" onClick={() => setIsOpen(false)} className="hover:opacity-80">Home</NavLink>
           <NavLink to="/shop" onClick={() => setIsOpen(false)} className="hover:opacity-80">Shop</NavLink>
           <NavLink to="/about" onClick={() => setIsOpen(false)} className="hover:opacity-80">About Us</NavLink>
           <NavLink to="/contact" onClick={() => setIsOpen(false)} className="hover:opacity-80">Contact Us</NavLink>
 
-          {/* ✅ Mobile Search */}
+          {/* Mobile Search */}
           <div className="relative">
             <input
               type="text"
@@ -169,14 +172,10 @@ export default function Navbar() {
                     <li
                       key={prod._id}
                       className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                      onClick={() => handleSearchSelect(prod.slug)} // ✅ slug-based navigation
+                      onClick={() => handleSearchSelect(prod.slug)}
                     >
                       {parts.map((part, idx) =>
-                        regex.test(part) ? (
-                          <span key={idx} className="font-bold">{part}</span>
-                        ) : (
-                          <span key={idx}>{part}</span>
-                        )
+                        regex.test(part) ? <span key={idx} className="font-bold">{part}</span> : <span key={idx}>{part}</span>
                       )}
                     </li>
                   );
@@ -185,28 +184,14 @@ export default function Navbar() {
             )}
           </div>
 
-          <NavLink to="/cart" onClick={() => setIsOpen(false)} className="relative flex items-center" id="cart-icon">
-            <ShoppingCart size={22} className="text-brand-brown hover:text-black transition-colors" />
-            {totalItems > 0 && (
-              <span
-                className={`absolute -top-2 -right-3 bg-brand-brown text-white text-xs px-2 py-0.5 rounded-full transition-transform ${bounce ? "animate-bounce" : ""}`}
-              >
-                {totalItems}
-              </span>
-            )}
-          </NavLink>
-
+          {/* Auth / Profile */}
           {user ? (
             <>
-              <NavLink
-                to="/profile"
-                onClick={() => setIsOpen(false)}
-                className="px-3 py-2 rounded-md bg-gray-200 text-gray-800 text-sm hover:bg-gray-300"
-              >
+              <NavLink to="/profile" onClick={() => setIsOpen(false)} className="px-3 py-2 rounded-md bg-gray-200 text-gray-800 text-sm hover:bg-gray-300">
                 Profile
               </NavLink>
               <button
-                className="px-3 py-2 rounded-md bg-brand-brown text-white text-sm"
+                className="px-3 py-2 rounded-md bg-brand-brown text-black text-sm"
                 onClick={async () => { await logout(); setIsOpen(false); }}
               >
                 Logout
@@ -214,9 +199,9 @@ export default function Navbar() {
             </>
           ) : (
             <NavLink
-              className="px-3 py-2 rounded-md bg-brand-brown text-white text-sm"
               to="/login"
               onClick={() => setIsOpen(false)}
+              className="px-3 py-2 rounded-md bg-brand-brown text-black text-sm"
             >
               Login
             </NavLink>

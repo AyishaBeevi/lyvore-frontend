@@ -13,7 +13,7 @@ export default function Checkout() {
     name: user?.name || "",
     email: user?.email || "",
     phone: user?.phone || "",
-    address: user?.shippingAddress?.line1 || "",
+    address: user?.shippingAddress?.address || "",
     city: user?.shippingAddress?.city || "",
     state: user?.shippingAddress?.state || "",
     pincode: user?.shippingAddress?.zip || "",
@@ -77,63 +77,6 @@ clearCart();                      // 🧠 frontend clear
     }
   };
 
-//   const pay = async () => {
-//     if (!isFormValid) {
-//       alert("Please fill all shipping details.");
-//       return;
-//     }
-
-//     setLoading(true);
-//     try {
-//       const { data } = await api.post("/payments/create-order", {
-//         amount: total,
-//         currency: "INR",
-//       });
-
-//       const options = {
-//         key: data.key,
-//         amount: data.order.amount,
-//         currency: data.order.currency || "INR",
-//         order_id: data.order.id,
-//         name: "LYVORE",
-//         description: "Order Payment",
-//         prefill: {
-//           name: shipping.name,
-//           email: shipping.email,
-//           contact: shipping.phone,
-//         },
-//         theme: { color: "#10B981" },
-//         handler: async (response) => {
-//           const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = response;
-//           if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-//             alert("❌ Invalid payment response!");
-//             return;
-//           }
-//           await verifyPayment(razorpay_order_id, razorpay_payment_id, razorpay_signature);
-//         },
-//       };
-// const scriptLoaded = await loadRazorpayScript();
-// if (!scriptLoaded) {
-//   alert("Failed to load payment gateway. Try again.");
-//   setLoading(false);
-//   return;
-// }
-
-// const rzp = new window.Razorpay(options);
-// rzp.open();
-//       // const rzp = new window.Razorpay(options);
-//       // rzp.open();
-//       rzp.on("payment.failed", (response) => {
-//         console.error("Payment failed:", response.error);
-//         alert("❌ Payment failed: " + response.error.description);
-//       });
-//     } catch (err) {
-//       console.error("Payment initiation error:", err.response?.data || err);
-//       alert("Payment initiation failed. Please try again.");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
 const loadRazorpayScript = () => {
   return new Promise((resolve) => {
     if (window.Razorpay) return resolve(true); // already loaded

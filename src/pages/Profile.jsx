@@ -14,6 +14,7 @@ export default function Profile() {
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+if (!user || !user._id) return <p>Loading user...</p>;
 
   useEffect(() => {
     const fetchProfile = async () => {

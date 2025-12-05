@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import api from '../api/axiosClient';
+import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 
 export default function Shop() {
@@ -8,7 +8,11 @@ export default function Shop() {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get('/products');
+        const baseURL = import.meta.env.VITE_API_URL || '';
+        const { data } = await axios.get(`${baseURL}/api/products`, {
+          withCredentials: true,
+        });
+
         setProducts(data.products || []);
       } catch (err) {
         console.error("Failed to fetch products:", err);
@@ -19,7 +23,7 @@ export default function Shop() {
   return (
     <div className="container-max py-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {products.length > 0 ? (
-        products.map(p => <ProductCard key={p._id} product={p} />)
+        products.map((p) => <ProductCard key={p._id} product={p} />)
       ) : (
         <p className="col-span-full text-center text-gray-500">
           No products available.
