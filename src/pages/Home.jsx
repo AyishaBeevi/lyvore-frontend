@@ -147,24 +147,47 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ---------- 3️⃣ SINGLE RESPONSIVE NO-CROP BANNER ---------- */}
+      {/* ---------- 3️⃣ RESPONSIVE VIDEO BANNER (MOBILE + DESKTOP) ---------- */}
 <section className="w-full flex justify-center py-10 px-4">
-  <motion.img
-  src="/images/banner.jpg"
-  alt="Banner"
-  className="
-    rounded-xl snap-start
-    object-cover
-    w-[160vw] h-[45vh]         /* wider than screen → scrollable */
-    md:w-[120vw] md:h-[60vh]
-    lg:w-[100vw] lg:h-[65vh]
-  "
-  whileInView={{ opacity: [0, 1], y: [40, 0] }}
-  transition={{ duration: 0.6 }}
-  viewport={{ once: true }}
-/>
+
+  {/* Desktop Video */}
+  <motion.video
+    autoPlay
+    loop
+    muted
+    playsInline
+    src="/videos/bannerviddesk.mp4"
+    className="
+      hidden md:block
+      rounded-xl
+      w-[100vw] h-[65vh]
+      object-cover
+    "
+    whileInView={{ opacity: [0, 1], y: [40, 0] }}
+    transition={{ duration: 0.6 }}
+    viewport={{ once: true }}
+  />
+
+  {/* Mobile Video */}
+  <motion.video
+    autoPlay
+    loop
+    muted
+    playsInline
+    src="/videos/bannermob.mp4"
+    className="
+      block md:hidden
+      rounded-xl
+      w-[100vw] h-[40vh]
+      object-cover
+    "
+    whileInView={{ opacity: [0, 1], y: [40, 0] }}
+    transition={{ duration: 0.6 }}
+    viewport={{ once: true }}
+  />
 
 </section>
+
 
 
       {/* ---------- 4️⃣ FOOTER ---------- */}
