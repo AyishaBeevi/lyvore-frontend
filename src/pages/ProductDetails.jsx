@@ -1,149 +1,3 @@
-// import { useEffect, useState } from "react";
-// import { useParams, useNavigate } from "react-router-dom";
-// import api from "../api/axiosClient";
-// import { useCart } from "../context/CartContext";
-
-// export default function ProductDetails() {
-//   const { slug } = useParams();
-//   const navigate = useNavigate();
-//   const [product, setProduct] = useState(null);
-//   const [quantity, setQuantity] = useState(1);
-//   const { addToCart } = useCart();
-
-//   useEffect(() => {
-//     (async () => {
-//       try {
-//         const res = await api.get(`/products/slug/${slug}`);
-//         setProduct(res.data.product);
-//       } catch (err) {
-//         console.error("Error fetching product details:", err);
-//       }
-//     })();
-//   }, [slug]);
-
-//   if (!product)
-//     return <p className="p-6 text-gray-600 text-center">Loading product...</p>;
-
-//   const handleAddToCart = () => {
-//     if (quantity < 1) return;
-//     addToCart(product, quantity);
-//   };
-
-//   const handleBuyNow = async () => {
-//     if (quantity < 1) return;
-//     await addToCart(product, quantity);
-//     navigate("/checkout");
-//   };
-
-//   return (
-//     <div className="p-8 max-w-4xl mx-auto bg-white rounded-xl shadow-lg">
-//       <img
-//         src={
-//           product.images?.[0]
-//             ? `http://localhost:5000${product.images[0]}`
-//             : "https://via.placeholder.com/400"
-//         }
-//         alt={product.name}
-//         className="w-full h-80 object-cover rounded-lg mb-6"
-//       />
-
-//       <h1 className="text-3xl font-semibold text-gray-800 mb-2">
-//         {product.name}
-//       </h1>
-//       <p className="text-gray-600 mb-4">{product.description}</p>
-
-//       <div className="text-lg text-gray-700 space-y-2">
-//         <p>
-//           <strong>Price:</strong>{" "}
-//           {product.discount > 0 ? (
-//             <>
-//               <span className="line-through text-gray-400">
-//                 ₹{product.price}
-//               </span>
-//               <span className="ml-2 text-green-600 font-semibold">
-//                 ₹{product.discountedPrice}
-//               </span>
-//             </>
-//           ) : (
-//             <span>₹{product.price}</span>
-//           )}
-//         </p>
-//         <p>
-//           <strong>Category:</strong> {product.category}
-//         </p>
-//         {product.tags?.length > 0 && (
-//           <p>
-//             <strong>Tags:</strong> {product.tags.join(", ")}
-//           </p>
-//         )}
-//         <p>
-//           <strong>Stock:</strong>{" "}
-//           <span
-//             className={`${
-//               product.stock > 0 ? "text-green-600" : "text-red-500"
-//             }`}
-//           >
-//             {product.stock > 0 ? `${product.stock} available` : "Out of stock"}
-//           </span>
-//         </p>
-//       </div>
-
-//       {/* Quantity + Buttons */}
-//       {product.stock > 0 && (
-//         <div className="mt-6 flex flex-col sm:flex-row sm:items-center gap-4">
-//           <div className="flex items-center border rounded-lg">
-//             <button
-//               onClick={() => setQuantity((q) => (q > 1 ? q - 1 : 1))}
-//               className="px-3 py-1 text-xl"
-//             >
-//               −
-//             </button>
-//             <span className="px-4 py-1">{quantity}</span>
-//             <button
-//               onClick={() =>
-//                 setQuantity((q) => (q < product.stock ? q + 1 : product.stock))
-//               }
-//               className="px-3 py-1 text-xl"
-//             >
-//               +
-//             </button>
-//           </div>
-
-//           <div className="flex gap-3">
-//             <button
-//               onClick={handleAddToCart}
-//               className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
-//             >
-//               🛒 Add to Cart
-//             </button>
-
-//             <button
-//               onClick={handleBuyNow}
-//               className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
-//             >
-//               ⚡ Buy Now
-//             </button>
-//           </div>
-//         </div>
-//       )}
-
-//       {/* Additional Images */}
-//       {product.images?.length > 1 && (
-//         <div className="flex flex-wrap gap-3 mt-8">
-//           {product.images.slice(1).map((img, i) => (
-//             <img
-//               key={i}
-//               src={`http://localhost:5000/${img}`}
-//               alt={`Product image ${i + 2}`}
-//               className="w-32 h-32 object-cover rounded border"
-//             />
-//           ))}
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
 
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -172,9 +26,11 @@ export default function ProductDetails() {
     return <p className="p-6 text-gray-600 text-center">Loading product...</p>;
 
   const mainImage =
-    product.images?.[0]
-      ? `http://localhost:5000${product.images[0]}`
-      : "https://via.placeholder.com/400";
+  product.images?.[0]
+    ? product.images[0].startsWith("http")
+      ? product.images[0]
+      : `https://lyvore-backend.onrender.com${product.images[0]}`
+    : "https://via.placeholder.com/400";
 
   const handleAddToCart = () => {
     if (quantity > 0) addToCart(product, quantity);
@@ -212,7 +68,11 @@ export default function ProductDetails() {
                   className="aspect-[4/5] w-24 overflow-hidden rounded border cursor-pointer"
                 >
                   <img
-                    src={`http://localhost:5000/${img}`}
+                    src={
+  img.startsWith("http")
+    ? img
+    : `https://lyvore-backend.onrender.com/${img}`
+}
                     className="w-full h-full object-cover"
                     alt={`Thumbnail ${i + 1}`}
                   />
