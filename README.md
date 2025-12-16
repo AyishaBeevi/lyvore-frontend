@@ -104,6 +104,7 @@ All components are deployed separately.
 > User credentials :
 email : newuser@gmail.com
 pass : newuser
+
 > Admin credentials are not public and can be shared **upon request**.
 ---
 
