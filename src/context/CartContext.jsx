@@ -43,7 +43,9 @@ export default function CartProvider({ children }) {
 
   if (!token) {
     toast.error("Please login to add items to cart");
-    window.location.href = "/login";
+    setTimeout(() => {
+  window.location.href = "/login";
+}, 1500);
     return;
   }
 
