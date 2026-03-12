@@ -14,6 +14,8 @@ import CartProvider from "./context/CartContext";
 import Profile from "./pages/Profile";
 import { Import } from "lucide-react";
 import Footer from "./components/Footer";
+import { Toaster } from "react-hot-toast";
+
 
 export default function App() {
   return (
@@ -21,6 +23,7 @@ export default function App() {
       <CartProvider>
         <div className="min-h-screen bg-lyvore-gradient text-gray-900">
           <Navbar />
+          <Toaster position="top-center" />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<AboutUs />} />

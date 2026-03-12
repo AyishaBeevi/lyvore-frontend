@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "../api/axiosClient";
+import toast from "react-hot-toast";
 
 const CartContext = createContext(null);
 export const useCart = () => useContext(CartContext);
@@ -41,7 +42,7 @@ export default function CartProvider({ children }) {
   const token = localStorage.getItem("token");
 
   if (!token) {
-    alert("Please login to add items to cart");
+    toast.error("Please login to add items to cart");
     window.location.href = "/login";
     return;
   }
