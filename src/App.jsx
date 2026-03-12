@@ -23,7 +23,19 @@ export default function App() {
       <CartProvider>
         <div className="min-h-screen bg-lyvore-gradient text-gray-900">
           <Navbar />
-          <Toaster position="top-center" />
+          <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 3000, // 3 seconds
+          style: {
+            padding: '16px',
+            borderRadius: '8px',
+            background: '#333',
+            color: '#fff',
+            fontWeight: '500'
+          }
+        }}
+      />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<AboutUs />} />

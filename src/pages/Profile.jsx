@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axiosClient";
 import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 export default function Profile() {
   const { user, token } = useAuth();
@@ -40,10 +41,10 @@ if (!user || !user._id) return <p>Loading user...</p>;
       await api.put(`/users/${user._id}/shipping`, shipping, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      alert("✅ Shipping address saved successfully!");
+      toast.success("✅ Shipping address saved successfully!");
     } catch (err) {
       console.error(err);
-      alert("❌ Failed to save address.");
+      toast.error("❌ Failed to save address.");
     } finally {
       setSaving(false);
     }

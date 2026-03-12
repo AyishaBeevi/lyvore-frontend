@@ -3,6 +3,7 @@
 
 import { useCart } from "../context/CartContext";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function Cart() {
   const { items, removeFromCart, addToCart,clearCart } = useCart();
@@ -17,6 +18,18 @@ export default function Cart() {
     }
     return product.price;
   };
+
+  const handleCheckout = () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    toast.error("Please login to proceed to checkout");
+    navigate("/login");
+    return;
+  }
+
+  navigate("/checkout");
+};
 
   const total = validItems.reduce((sum, i) => {
     const price = calculateDiscountedPrice(i.productId);
@@ -66,7 +79,7 @@ export default function Cart() {
             if (item.quantity < (product.stock ?? Infinity)) {
               addToCart(product, 1); // increase quantity by 1
             } else {
-              alert(`Only ${product.stock} units available`);
+              toast.error(`Only ${product.stock} units available`);
             }
           };
 
@@ -148,11 +161,11 @@ export default function Cart() {
     </button>
 
     <button
-      onClick={() => navigate("/checkout")}
-      className="px-6 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
-    >
-      Proceed to Checkout
-    </button>
+  onClick={handleCheckout}
+  className="px-6 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
+>
+  Proceed to Checkout
+</button>
   </div>
 </div>
 

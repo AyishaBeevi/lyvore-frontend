@@ -1,8 +1,8 @@
-
 import { useState, useEffect } from "react";
 import api from "../api/axiosClient";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 export default function Checkout() {
   const { items, clearCart } = useCart();
@@ -65,96 +65,95 @@ export default function Checkout() {
       );
 
       console.log("Payment & Order verified:", res.data);
-      alert("✅ Payment successful! Your order has been placed.");
+      toast.success("✅ Payment successful! Your order has been placed.");
 
       // Clear cart after successful order
-await api.delete('/cart/clear');  // 🧹 backend clear
-clearCart();                      // 🧠 frontend clear
+      await api.delete('/cart/clear');  
+      clearCart();                      
 
     } catch (err) {
       console.error("Payment verification failed:", err.response?.data || err);
-      alert("❌ Payment verification failed. Check backend logs.");
+      toast.error("❌ Payment verification failed. Check backend logs.");
     }
   };
 
-const loadRazorpayScript = () => {
-  return new Promise((resolve) => {
-    if (window.Razorpay) return resolve(true); // already loaded
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) return resolve(true);
 
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
 
-    document.body.appendChild(script);
-  });
-};
+      document.body.appendChild(script);
+    });
+  };
 
-const pay = async () => {
-  if (!isFormValid) {
-    alert("Please fill all shipping details.");
-    return;
-  }
-
-  setLoading(true);
-  try {
-    // 1. Load Razorpay script first
-    const loaded = await loadRazorpayScript();
-    if (!loaded) {
-      alert("Failed to load payment gateway script.");
-      setLoading(false);
+  const pay = async () => {
+    if (!isFormValid) {
+      toast.error("Please fill all shipping details."); 
       return;
     }
 
-    const { data } = await api.post("/payments/create-order", {
-      amount: total,
-      currency: "INR",
-    });
+    setLoading(true);
+    try {
+      const loaded = await loadRazorpayScript();
+      if (!loaded) {
+        toast.error("Failed to load payment gateway script.");
+        setLoading(false);
+        return;
+      }
 
-    const options = {
-      key: data.key,
-      amount: data.order.amount,
-      currency: data.order.currency || "INR",
-      order_id: data.order.id,
-      name: "LYVORE",
-      description: "Order Payment",
-      prefill: {
-        name: shipping.name,
-        email: shipping.email,
-        contact: shipping.phone,
-      },
-      theme: { color: "#10B981" },
-      handler: async (response) => {
-        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-          response;
+      const { data } = await api.post("/payments/create-order", {
+        amount: total,
+        currency: "INR",
+      });
 
-        if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-          alert("❌ Invalid payment response!");
-          return;
-        }
+      const options = {
+        key: data.key,
+        amount: data.order.amount,
+        currency: data.order.currency || "INR",
+        order_id: data.order.id,
+        name: "LYVORE",
+        description: "Order Payment",
+        prefill: {
+          name: shipping.name,
+          email: shipping.email,
+          contact: shipping.phone,
+        },
+        theme: { color: "#10B981" },
+        handler: async (response) => {
+          const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+            response;
 
-        await verifyPayment(
-          razorpay_order_id,
-          razorpay_payment_id,
-          razorpay_signature
-        );
-      },
-    };
+          if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+            toast.error("❌ Invalid payment response!"); 
+            return;
+          }
 
-    const rzp = new window.Razorpay(options);
-    rzp.open();
+          await verifyPayment(
+            razorpay_order_id,
+            razorpay_payment_id,
+            razorpay_signature
+          );
+        },
+      };
 
-    rzp.on("payment.failed", (response) => {
-      console.error("Payment failed:", response.error);
-      alert("❌ Payment failed: " + response.error.description);
-    });
-  } catch (err) {
-    console.error("Payment initiation error:", err.response?.data || err);
-    alert("Payment initiation failed. Please try again.");
-  } finally {
-    setLoading(false);
-  }
-};
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+
+      rzp.on("payment.failed", (response) => {
+        console.error("Payment failed:", response.error);
+        toast.error("❌ Payment failed: " + response.error.description);
+      });
+    } catch (err) {
+      console.error("Payment initiation error:", err.response?.data || err);
+      toast.error("Payment initiation failed. Please try again."); 
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="container-max py-10 px-4 md:px-0">
