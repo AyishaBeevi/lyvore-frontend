@@ -9,56 +9,75 @@ export default function CartProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   // Fetch cart from backend
-  const fetchCart = async () => {
-    try {
-      const { data } = await api.get("/cart");
-      setItems(
-        data.items?.map((item) => ({
-          ...item,
-          quantity: Math.max(item.quantity, 1),
-        })) || []
-      );
-    } catch (err) {
-      console.error("Failed to fetch cart:", err);
-      setItems([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+ const fetchCart = async () => {
 
-  useEffect(() => {
-    fetchCart();
-  }, []);
+  const token = localStorage.getItem("token");
+  if (!token) {
+    setLoading(false);
+    return;
+  }
+
+  try {
+    const { data } = await api.get("/cart");
+
+    setItems(
+      data.items?.map((item) => ({
+        ...item,
+        quantity: Math.max(item.quantity, 1),
+      })) || []
+    );
+
+  } catch (err) {
+    console.error("Failed to fetch cart:", err);
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Add product to cart
-  const addToCart = async (product, quantity = 1) => {
-    if (!product) return;
+ const addToCart = async (product, quantity = 1) => {
+  if (!product) return;
 
-    const existing = items.find((i) => i.productId._id === product._id);
-    const currentQty = existing?.quantity || 0;
-    const stock = product.stock ?? Infinity;
+  const token = localStorage.getItem("token");
 
-    if (currentQty + quantity > stock) {
-      alert(` Only ${stock} units of this product in stock`);
+  if (!token) {
+    alert("Please login to add items to cart");
+    window.location.href = "/login";
+    return;
+  }
+
+  const existing = items.find((i) => i.productId._id === product._id);
+  const currentQty = existing?.quantity || 0;
+  const stock = product.stock ?? Infinity;
+
+  if (currentQty + quantity > stock) {
+    alert(`Only ${stock} units of this product in stock`);
+    return;
+  }
+
+  try {
+    const { data } = await api.post("/cart/add", {
+      productId: product._id,
+      quantity,
+    });
+
+    setItems(
+      data.items?.map((item) => ({
+        ...item,
+        quantity: Math.max(item.quantity, 1),
+      })) || []
+    );
+  } catch (err) {
+
+    if (err.response?.status === 401) {
+      alert("You must login before adding items to cart");
+      window.location.href = "/login";
       return;
     }
 
-    try {
-      const { data } = await api.post("/cart/add", {
-        productId: product._id,
-        quantity,
-      });
-      setItems(
-        data.items?.map((item) => ({
-          ...item,
-          quantity: Math.max(item.quantity, 1),
-        })) || []
-      );
-    } catch (err) {
-      console.error("Failed to add to cart:", err);
-    }
-  };
-
+    console.error("Failed to add to cart:", err);
+  }
+};
   // Remove product from cart
   const removeFromCart = async (productId) => {
     try {
