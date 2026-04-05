@@ -94,8 +94,11 @@ export default function Shop() {
 
           <motion.div
             className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-10"
-            initial="hidden"
-            animate="visible"
+          
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true }}
+            
             variants={{
               hidden: {},
               visible: {
