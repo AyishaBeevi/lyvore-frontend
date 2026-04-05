@@ -88,7 +88,7 @@ export default function Shop() {
 
 
       {/* ---------- PRODUCTS GRID ---------- */}
-      <section className="container-max px-4 md:px-8 pb-20">
+      <section className="w-full max-w-7xl mx-auto px-4 md:px-8 pb-20 min-h-[60vh]">
 
         {products.length > 0 ? (
 
