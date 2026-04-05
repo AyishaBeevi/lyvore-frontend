@@ -32,8 +32,6 @@
 //     </div>
 //   );
 // }
-
-
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
@@ -60,14 +58,13 @@ export default function Shop() {
   return (
     <main className="w-full bg-[#faf6f1] min-h-screen">
 
-      {/* ---------- HEADER (PREMIUM HERO) ---------- */}
+      {/* ---------- HEADER ---------- */}
       <section className="relative py-20 px-6 md:px-16 text-center overflow-hidden">
 
-        {/* background glow */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#f5eee7] to-transparent"></div>
 
         <motion.h1
-          className="text-4xl md:text-6xl font-bold tracking-wide z-10 relative"
+          className="text-4xl md:text-6xl font-bold tracking-wide relative z-10"
           style={{ fontFamily: "'Playfair Display', serif", color: "#785c3a" }}
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -77,7 +74,7 @@ export default function Shop() {
         </motion.h1>
 
         <motion.p
-          className="mt-4 text-gray-600 max-w-xl mx-auto z-10 relative"
+          className="mt-4 text-gray-600 max-w-xl mx-auto relative z-10"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -94,13 +91,10 @@ export default function Shop() {
 
           <motion.div
             className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-10"
-          
-  initial="hidden"
-  whileInView="visible"
-  viewport={{ once: true }}
-            
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
             variants={{
-              hidden: {},
               visible: {
                 transition: {
                   staggerChildren: 0.08
@@ -108,19 +102,21 @@ export default function Shop() {
               }
             }}
           >
+
             {products.map((p) => (
               <motion.div
                 key={p._id}
                 variants={{
-                  hidden: { opacity: 0, y: 40 },
+                  hidden: { opacity: 0, y: 60 },
                   visible: { opacity: 1, y: 0 }
                 }}
-                transition={{ duration: 0.5 }}
-                whileHover={{ y: -8 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                whileHover={{ y: -6 }}
               >
                 <ProductCard product={p} />
               </motion.div>
             ))}
+
           </motion.div>
 
         ) : (
