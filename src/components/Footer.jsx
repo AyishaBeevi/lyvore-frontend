@@ -1,46 +1,62 @@
 import { FaInstagram, FaFacebook, FaWhatsapp } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-300 py-6 mt-auto">
-      <div className="container mx-auto px-4 flex flex-col items-center text-center space-y-3">
-        {/* Branding */}
-        <p className="text-sm sm:text-base">
-          © {new Date().getFullYear()} <span className="font-semibold text-white">ay</span>. All Rights Reserved.
-        </p>
+    <footer className="bg-[#f5eee7] text-gray-700 py-16 mt-auto border-t border-[#e5d6c3]">
 
-        {/* Social Links */}
-        <div className="flex space-x-5 text-xl">
-          <a
-            href="https://instagram.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-pink-500 transition-colors"
-          >
-            <FaInstagram />
-          </a>
-          <a
-            href="https://facebook.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-blue-500 transition-colors"
-          >
-            <FaFacebook />
-          </a>
-          <a
-            href="https://wa.me/yourwhatsapplink"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-green-500 transition-colors"
-          >
-            <FaWhatsapp />
-          </a>
-        </div>
+      <div className="max-w-6xl mx-auto px-6 text-center">
+
+        {/* Brand */}
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="text-3xl mb-4"
+          style={{ fontFamily: "'Playfair Display', serif", color: "#785c3a" }}
+        >
+          LYVORE
+        </motion.h2>
 
         {/* Tagline */}
-        <p className="text-xs text-gray-400">
-          Built with ❤️ by the <span className="font-medium text-white">LYVORE Team</span>
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-sm text-gray-500 mb-8"
+        >
+          Crafted for elegance. Designed for everyday luxury.
+        </motion.p>
+
+        {/* Social Icons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="flex justify-center gap-6 text-lg mb-10"
+        >
+          {[FaInstagram, FaFacebook, FaWhatsapp].map((Icon, i) => (
+            <motion.a
+              key={i}
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.2, y: -3 }}
+              whileTap={{ scale: 0.9 }}
+              className="p-3 rounded-full bg-white shadow-md hover:shadow-xl transition"
+            >
+              <Icon />
+            </motion.a>
+          ))}
+        </motion.div>
+
+        {/* Divider */}
+        <div className="w-16 h-[1px] bg-[#d6bfa3] mx-auto mb-6" />
+
+        {/* Copyright */}
+        <p className="text-xs text-gray-500">
+          © {new Date().getFullYear()} LYVORE. All rights reserved.
         </p>
+
       </div>
     </footer>
   );
